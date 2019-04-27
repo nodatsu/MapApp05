@@ -6,6 +6,7 @@ import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,9 +52,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        // 緯度経度を指定して住所を表示
-        String result = getAddress(this, -34, 151);
-        Log.d("QQQQ", result);
+        // ロングタップした場所の住所を表示
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                String result = getAddress(MapsActivity.this, latLng.latitude, latLng.longitude);
+                Toast.makeText(MapsActivity.this, "国名は" + result, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     // 緯度経度から住所を取得するメソッド
